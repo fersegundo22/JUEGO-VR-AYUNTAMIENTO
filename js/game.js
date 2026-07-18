@@ -484,9 +484,11 @@
         pos.x += Math.sin(rot.y) * vel;
         pos.z += Math.cos(rot.y) * vel;
       } else if (direccion === "izquierda") {
-        rig.object3D.rotation.y += 0.04;
+        pos.x -= Math.cos(rot.y) * vel;
+        pos.z += Math.sin(rot.y) * vel;
       } else if (direccion === "derecha") {
-        rig.object3D.rotation.y -= 0.04;
+        pos.x += Math.cos(rot.y) * vel;
+        pos.z -= Math.sin(rot.y) * vel;
       }
     }
 
