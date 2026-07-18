@@ -30,7 +30,7 @@
       </p>
       <ul class="instrucciones">
         <li>🖥️ <strong>PC:</strong> camina con <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>, mira con el mouse y haz <strong>doble clic</strong> para elegir respuesta.</li>
-        <li>📱 <strong>Celular:</strong> mira con el giroscopio y toca <strong>doble tap</strong> en la opción.</li>
+        <li>📱 <strong>Celular:</strong> usa los <strong>botones táctiles</strong> abajo a la izquierda para caminar, mira con el giroscopio y toca <strong>doble tap</strong> en la opción.</li>
         <li>🥽 <strong>Con visor VR (Cardboard/Shinecon):</strong> coloca el círculo amarillo sobre la respuesta y <strong>mantén la mirada fija 3 segundos</strong>. El círculo se irá encogiendo hasta seleccionar.</li>
         <li>🥽 Pulsa el ícono de lentes (abajo a la derecha) para entrar en modo VR.</li>
       </ul>
@@ -254,6 +254,16 @@
     </a-entity>
 
   </a-scene>
+
+  <!-- ===================== CONTROLES TÁCTILES MÓVIL ===================== -->
+  <div id="controles-tactiles" class="oculto">
+    <div id="dpad">
+      <button id="btn-arriba"   class="btn-dpad">▲</button>
+      <button id="btn-izquierda" class="btn-dpad">◀</button>
+      <button id="btn-abajo"   class="btn-dpad">▼</button>
+      <button id="btn-derecha" class="btn-dpad">▶</button>
+    </div>
+  </div>
 
   <!-- Lógica del juego -->
   <script src="js/game.js"></script>

@@ -147,7 +147,7 @@
     "Recorre la plaza, acercate a las cinco estaciones moradas y responde cada mision. " +
     "Cada respuesta correcta vale veinte puntos. " +
     "En computadora, camina con las teclas W A S D y elige las respuestas con doble clic. " +
-    "En celular, toca dos veces la opcion que quieras elegir. " +
+    "En celular, usa los botones de la pantalla para caminar y toca dos veces la opcion que quieras elegir. " +
     "Con visor de realidad virtual, coloca el circulo amarillo sobre la respuesta y manten la mirada fija durante tres segundos. " +
     "Marlene Pineda García te desea ¡Mucho exito!, al final obtendras un diploma personalizado. ";
 
@@ -456,11 +456,80 @@
   }
 
   /* ==============================================================
-     12. ARRANQUE
+     13. CONTROLES TÁCTILES PARA MÓVIL
+     ============================================================== */
+  function configurarControlesTactiles() {
+    var esVR = /VR|Cardboard|Shinecon/i.test(navigator.userAgent);
+
+    var dpad = document.getElementById("controles-tactiles");
+    if (dpad) {
+      if (esVR) dpad.classList.add("oculto");
+      else dpad.classList.remove("oculto");
+    }
+
+    var rig = document.querySelector("#rig");
+    var intervalo = null;
+    var direccion = null;
+
+    function mover() {
+      if (!rig || !direccion) return;
+      var rot = rig.object3D.rotation;
+      var vel = 0.12;
+      var pos = rig.object3D.position;
+
+      if (direccion === "adelante") {
+        pos.x -= Math.sin(rot.y) * vel;
+        pos.z -= Math.cos(rot.y) * vel;
+      } else if (direccion === "atras") {
+        pos.x += Math.sin(rot.y) * vel;
+        pos.z += Math.cos(rot.y) * vel;
+      } else if (direccion === "izquierda") {
+        rig.object3D.rotation.y += 0.04;
+      } else if (direccion === "derecha") {
+        rig.object3D.rotation.y -= 0.04;
+      }
+    }
+
+    function iniciar(dir) {
+      direccion = dir;
+      if (!intervalo) intervalo = setInterval(mover, 30);
+    }
+
+    function detener() {
+      direccion = null;
+      clearInterval(intervalo);
+      intervalo = null;
+    }
+
+    var btnArriba    = document.getElementById("btn-arriba");
+    var btnAbajo     = document.getElementById("btn-abajo");
+    var btnIzquierda = document.getElementById("btn-izquierda");
+    var btnDerecha   = document.getElementById("btn-derecha");
+
+    function bind(boton, dir) {
+      if (!boton) return;
+      boton.addEventListener("touchstart", function(e) { e.preventDefault(); iniciar(dir); });
+      boton.addEventListener("touchend",   function(e) { e.preventDefault(); detener(); });
+      boton.addEventListener("mousedown",  function(e) { e.preventDefault(); iniciar(dir); });
+      boton.addEventListener("mouseup",    function(e) { e.preventDefault(); detener(); });
+    }
+
+    bind(btnArriba,    "adelante");
+    bind(btnAbajo,     "atras");
+    bind(btnIzquierda, "izquierda");
+    bind(btnDerecha,   "derecha");
+  }
+
+  /* ==============================================================
+     15. ARRANQUE
+     Miras al suelo -> avanzas. Miras al cielo -> te detienes.
+  /* ==============================================================
+     15. ARRANQUE
      ============================================================== */
   function iniciarJuego() {
     crearEstaciones();
     vigilarProximidad();
+    configurarControlesTactiles();
     ui.btnComenzar.addEventListener("click", comenzar);
     ui.btnReiniciar.addEventListener("click", reiniciar);
   }
