@@ -1,0 +1,262 @@
+/* ============================================================
+   ESTILOS DE LA INTERFAZ 2D
+   Juego VR: Las Mujeres en la Administración Pública Municipal
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+/* Utilidad para ocultar elementos */
+.oculto {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------
+   OVERLAYS (introducción y pantalla final)
+   ------------------------------------------------------------ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(circle at center, #1c2b4a 0%, #0d1526 100%);
+  overflow-y: auto;
+}
+
+.tarjeta {
+  max-width: 640px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  animation: aparecer 0.5s ease-out;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tarjeta h1 {
+  color: #1c3f66;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.subtitulo {
+  color: #7a1f9e;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.tarjeta p {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+/* Lista de instrucciones */
+.instrucciones {
+  text-align: left;
+  list-style: none;
+  background: #f2f6fb;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.instrucciones li {
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+kbd {
+  background: #1c3f66;
+  color: #fff;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.85em;
+  margin: 0 1px;
+}
+
+/* Campo de nombre */
+label {
+  display: block;
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+#nombre-jugador {
+  width: 80%;
+  padding: 10px 14px;
+  border: 2px solid #c9d6e5;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+#nombre-jugador:focus {
+  border-color: #7a1f9e;
+}
+
+/* Botones principales */
+button {
+  background: linear-gradient(135deg, #7a1f9e, #4a2f9e);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 13px 34px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 22px rgba(122, 31, 158, 0.45);
+}
+
+/* ------------------------------------------------------------
+   HUD 2D (puntos + barra de progreso)
+   ------------------------------------------------------------ */
+#hud {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(13, 21, 38, 0.85);
+  border-radius: 30px;
+  padding: 8px 18px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+#hud-puntos {
+  white-space: nowrap;
+}
+
+/* Contenedor de la barra de progreso */
+#barra-contenedor {
+  position: relative;
+  width: 220px;
+  height: 18px;
+  background: #2a3b5c;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Relleno animado de la barra */
+#barra-progreso {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #28c76f, #7ee8a5);
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+
+/* Etiqueta "Misión X / 5" sobre la barra */
+#barra-etiqueta {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* ------------------------------------------------------------
+   DIPLOMA FINAL
+   ------------------------------------------------------------ */
+.diploma {
+  background: #fdf9ef;
+}
+
+.diploma-borde {
+  border: 6px double #b08d3c;
+  border-radius: 8px;
+  padding: 26px 20px;
+  margin-bottom: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(176, 141, 60, 0.08), transparent 60%),
+    #fdf9ef;
+}
+
+.diploma-borde h1 {
+  color: #b08d3c;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+.diploma-otorga {
+  font-style: italic;
+  color: #666;
+}
+
+#diploma-nombre {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.9rem;
+  color: #1c3f66;
+  margin: 8px 0 12px;
+  border-bottom: 2px solid #b08d3c;
+  display: inline-block;
+  padding: 0 18px 4px;
+}
+
+.diploma-motivo {
+  color: #444;
+  line-height: 1.5;
+}
+
+.diploma-puntaje {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7a1f9e;
+  margin-top: 12px;
+}
+
+.diploma-mensaje {
+  color: #28703f;
+  font-weight: 600;
+}
+
+.diploma-fecha {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------
+   RESPONSIVO (pantallas pequeñas / celulares)
+   ------------------------------------------------------------ */
+@media (max-width: 480px) {
+  .tarjeta { padding: 22px 16px; }
+  .tarjeta h1 { font-size: 1.15rem; }
+  #barra-contenedor { width: 130px; }
+  #hud { font-size: 0.8rem; gap: 8px; }
+  #diploma-nombre { font-size: 1.4rem; }
+}

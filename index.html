@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Mujeres en la Administración Pública Municipal | Experiencia VR</title>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ====================== INTRODUCCIÓN ====================== -->
+  <div id="pantalla-intro" class="overlay">
+    <div class="tarjeta">
+      <h1>Mujeres en la Administración Pública Municipal</h1>
+      <p class="subtitulo">Una experiencia educativa en Realidad Virtual</p>
+      <p>
+        Recorre el Ayuntamiento, conoce el papel de las mujeres en el
+        gobierno municipal y completa <strong>5 misiones</strong>.
+        Cada respuesta correcta vale <strong>20 puntos</strong>.
+      </p>
+      <ul class="instrucciones">
+        <li> <strong>PC:</strong> camina con <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> y mira con el mouse.</li>
+        <li> <strong>Celular / Shinecon:</strong> mira con el giroscopio y selecciona fijando la vista.</li>
+        <li> Pulsa el ícono de lentes para entrar en modo VR.</li>
+      </ul>
+      <label for="nombre-jugador">Escribe tu nombre (aparecerá en tu diploma):</label>
+      <input id="nombre-jugador" type="text" maxlength="40" placeholder="Tu nombre" />
+      <button id="btn-comenzar">▶ Comenzar experiencia</button>
+    </div>
+  </div>
+
+  <!-- ====================== PANTALLA FINAL ====================== -->
+  <div id="pantalla-final" class="overlay oculto">
+    <div class="tarjeta diploma">
+      <div class="diploma-borde">
+        <h1>DIPLOMA</h1>
+        <p class="diploma-otorga">Se otorga el presente reconocimiento a</p>
+        <h2 id="diploma-nombre">Participante</h2>
+        <p class="diploma-motivo">
+          Por completar con éxito la experiencia educativa en Realidad Virtual<br />
+          <strong>«Las Mujeres en la Administración Pública Municipal»</strong>
+        </p>
+        <p id="diploma-puntaje" class="diploma-puntaje">Puntuación final: 0 / 100</p>
+        <p id="diploma-mensaje" class="diploma-mensaje"></p>
+        <p id="diploma-fecha" class="diploma-fecha"></p>
+      </div>
+      <button id="btn-reiniciar">🔄 Jugar de nuevo</button>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       ESCENA A-FRAME
+       ================================================================ -->
+  <a-scene id="escena"
+           background="color: #87CEEB"
+           fog="type: linear; color: #cfe8ff; near: 40; far: 120"
+           renderer="antialias: true"
+           loading-screen="dollyColor: #1c2b4a; backgroundColor: #0d1526">
+
+    <!-- ---------- ILUMINACIÓN ---------- -->
+    <a-entity light="type: ambient; color: #ffffff; intensity: 0.6"></a-entity>
+    <a-entity light="type: directional; color: #fff6e0; intensity: 0.9" position="-10 20 10"></a-entity>
+
+    <!-- ---------- SUELO Y PLAZA ---------- -->
+    <a-plane rotation="-90 0 0" width="200" height="200" color="#79b465"></a-plane>
+    <a-circle rotation="-90 0 0" position="0 0.01 4" radius="14" color="#c9c2b4"></a-circle>
+    <a-plane rotation="-90 0 0" position="0 0.02 5" width="4" height="20" color="#a89f8d"></a-plane>
+
+    <!-- ===================== AYUNTAMIENTO ====================== -->
+    <a-entity id="ayuntamiento" position="0 0 -12">
+      <a-box position="0 3 0" width="22" height="6" depth="8" color="#e8d8b0"></a-box>
+      <a-box position="0 7 0" width="10" height="2.4" depth="7" color="#dfcda0"></a-box>
+      <a-box position="0 8.5 0" width="10.8" height="0.6" depth="7.6" color="#8d5a3a"></a-box>
+      <a-box position="-8 6.3 0" width="6.5" height="0.6" depth="8.4" color="#8d5a3a"></a-box>
+      <a-box position="8 6.3 0" width="6.5" height="0.6" depth="8.4" color="#8d5a3a"></a-box>
+
+      <a-cylinder position="-4 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
+      <a-cylinder position="-2 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
+      <a-cylinder position="2 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
+      <a-cylinder position="4 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
+
+      <a-box position="0 1.5 4.05" width="2.4" height="3" depth="0.2" color="#5b3a21"></a-box>
+
+      <a-box position="-8 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="-6 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="6 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="8 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="-3 7 3.55" width="1.6" height="1.5" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="3 7 3.55" width="1.6" height="1.5" depth="0.1" color="#9fc6e8"></a-box>
+
+      <a-circle position="0 7.2 3.55" radius="0.8" color="#fdf6e3"></a-circle>
+      <a-ring position="0 7.2 3.56" radius-inner="0.75" radius-outer="0.85" color="#5b3a21"></a-ring>
+      <a-box position="0 7.35 3.57" width="0.06" height="0.5" depth="0.02" color="#333"></a-box>
+      <a-box position="0.15 7.2 3.57" width="0.35" height="0.06" depth="0.02" color="#333"></a-box>
+
+      <a-text value="H. AYUNTAMIENTO" position="0 8.5 4" align="center" color="#5b3a21" width="14"></a-text>
+
+      <a-cylinder position="-13 4 6" radius="0.08" height="8" color="#cccccc"></a-cylinder>
+      <a-plane position="-12.1 7.2 6" width="1.8" height="1.1" color="#7a1f9e" side="double"
+               animation="property: rotation; to: 0 15 0; dir: alternate; loop: true; dur: 2000"></a-plane>
+    </a-entity>
+
+    <!-- ---------- FUENTE ---------- -->
+    <a-entity position="0 0 6">
+      <a-cylinder position="0 0.3 0" radius="2" height="0.6" color="#9aa7b5"></a-cylinder>
+      <a-cylinder position="0 0.65 0" radius="1.7" height="0.15" color="#3e7cb1" opacity="0.85"></a-cylinder>
+      <a-cylinder position="0 1 0" radius="0.25" height="1.2" color="#9aa7b5"></a-cylinder>
+      <a-sphere position="0 1.75 0" radius="0.32" color="#6fb3e0" opacity="0.9"
+                animation="property: position; to: 0 1.95 0; dir: alternate; loop: true; dur: 1200"></a-sphere>
+    </a-entity>
+
+    <!-- ---------- ÁRBOLES ---------- -->
+    <a-entity position="-16 0 2"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+    <a-entity position="16 0 2"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+    <a-entity position="-18 0 12"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+    <a-entity position="18 0 12"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+    <a-entity position="-10 0 18"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+    <a-entity position="10 0 18"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+
+    <!-- ===================== ESTACIONES (posiciones fijas en el mundo) ===================== -->
+    <a-entity id="estaciones">
+      <a-entity class="estacion" data-mision="0" position="-8 0 0"   rotation="0 35 0"></a-entity>
+      <a-entity class="estacion" data-mision="1" position="8 0 0"    rotation="0 -35 0"></a-entity>
+      <a-entity class="estacion" data-mision="2" position="-11 0 10" rotation="0 55 0"></a-entity>
+      <a-entity class="estacion" data-mision="3" position="11 0 10"  rotation="0 -55 0"></a-entity>
+      <a-entity class="estacion" data-mision="4" position="0 0 16"   rotation="0 180 0"></a-entity>
+    </a-entity>
+
+    <!-- ==================================================================
+         JUGADOR (rig): WASD + mouse / giroscopio
+         Panel VR centrado frente a la cámara a z=-4
+         ================================================================== -->
+    <a-entity id="rig" position="0 0 22" wasd-controls="acceleration: 40">
+      <a-entity id="camara" camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+
+        <!-- Cursor de selección (anillo pequeño, no tapa el texto) -->
+        <a-ring id="cursor"
+                position="0 0 -0.8"
+                radius-inner="0.012" radius-outer="0.02"
+                color="#ffcc00"
+                opacity="0.85"
+                raycaster="objects: .clicable; far: 6"
+                fuse="true" fuse-timeout="1300"
+                animation__fusing="property: scale; startEvents: fusing; from: 1 1 1; to: 0.35 0.35 0.35; dur: 1300"
+                animation__reset="property: scale; startEvents: mouseleave; to: 1 1 1; dur: 150">
+        </a-ring>
+
+        <!-- =============================================================
+             PANEL VR ÚNICO (centrado frente al usuario a 4 metros)
+             Layout vertical: título -> pregunta -> opciones A/B/C -> retro
+             ============================================================= -->
+        <a-entity id="panel-vr" position="0 -0.3 -4" visible="false">
+
+          <!-- Fondo oscuro semitransparente -->
+          <a-plane width="3.6" height="3.4" color="#0d1526" opacity="0.94"></a-plane>
+
+          <!-- Título -->
+          <a-text id="pv-titulo" value="" position="0 1.4 0.01" align="center" width="4.6" color="#ffcc00"></a-text>
+
+          <!-- Pregunta -->
+          <a-text id="pv-problema" value="" position="0 0.45 0.01" align="center" width="4.8" wrap-count="52" color="#ffffff"></a-text>
+
+          <!-- Opción A -->
+          <a-entity id="pv-opcion-a" class="clicable" data-opcion="0" position="0 -0.35 0.02">
+            <a-plane width="3.2" height="0.48" color="#1c3f66" opacity="0.95"></a-plane>
+            <a-text id="pv-texto-a" value="A)" position="0 -0.02 0.01" align="center" width="4.2" color="#ffffff"></a-text>
+          </a-entity>
+
+          <!-- Opción B -->
+          <a-entity id="pv-opcion-b" class="clicable" data-opcion="1" position="0 -0.95 0.02">
+            <a-plane width="3.2" height="0.48" color="#1c3f66" opacity="0.95"></a-plane>
+            <a-text id="pv-texto-b" value="B)" position="0 -0.02 0.01" align="center" width="4.2" color="#ffffff"></a-text>
+          </a-entity>
+
+          <!-- Opción C -->
+          <a-entity id="pv-opcion-c" class="clicable" data-opcion="2" position="0 -1.55 0.02">
+            <a-plane width="3.2" height="0.48" color="#1c3f66" opacity="0.95"></a-plane>
+            <a-text id="pv-texto-c" value="C)" position="0 -0.02 0.01" align="center" width="4.2" color="#ffffff"></a-text>
+          </a-entity>
+
+          <!-- Retroalimentación -->
+          <a-text id="pv-retro" value="" position="0 -2.15 0.01" align="center" width="4.6" wrap-count="50" color="#7ee8a5"></a-text>
+        </a-entity>
+
+        <!-- ===================== HUD VR (puntos + barra) ===================== -->
+        <a-entity id="hud-vr" position="0 -1.55 -2">
+          <a-plane width="1.4" height="0.1" color="#222" opacity="0.75"></a-plane>
+          <a-plane id="hud-vr-barra" position="-0.7 0 0.01" width="1.4" height="0.08" color="#28c76f" scale="0 1 1"></a-plane>
+          <a-text id="hud-vr-texto" value="Puntos: 0  |  0/5 misiones"
+                  position="0 0.14 0" align="center" width="2.2" color="#ffffff"></a-text>
+        </a-entity>
+
+      </a-entity>
+    </a-entity>
+
+  </a-scene>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
