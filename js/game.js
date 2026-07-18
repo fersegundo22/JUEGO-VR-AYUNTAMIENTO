@@ -1,13 +1,13 @@
 /* ================================================================
-   LÓGICA DEL JUEGO
-   "Las Mujeres en la Administración Pública Municipal" — VR A-Frame
+   LoGICA DEL JUEGO
+   "Las Mujeres en la Administracion Publica Municipal" — VR A-Frame
    ----------------------------------------------------------------
    Responsabilidades de este archivo:
    1. Datos de las 5 misiones (problema + 3 opciones + retro).
-   2. Construcción dinámica de las estaciones 3D en la escena.
-   3. Narración por voz (Web Speech API, sin archivos externos).
+   2. Construccion dinámica de las estaciones 3D en la escena.
+   3. Narracion por voz (Web Speech API, sin archivos externos).
    4. Sonidos de acierto/error (Web Audio API, sin archivos externos).
-   5. Puntuación, barra de progreso (HUD 2D y HUD dentro del visor VR).
+   5. Puntuacion, barra de progreso (HUD 2D y HUD dentro del visor VR).
    6. Pantalla final con diploma personalizado.
    ================================================================ */
 
@@ -16,15 +16,15 @@
 
   /* ==============================================================
      1. DATOS DE LAS MISIONES
-     Cada misión: título, problema, 3 opciones, índice de la
-     respuesta correcta y una retroalimentación educativa.
+     Cada mision: título, problema, 3 opciones, índice de la
+     respuesta correcta y una retroalimentacion educativa.
      ============================================================== */
   const MISIONES = [
     {
       titulo: "Mision 1: La Presidenta Municipal",
       problema:
-        "El municipio necesita definir quién encabeza el gobierno local. " +
-        "¿Qué cargo puede ocupar una mujer como máxima autoridad del Ayuntamiento?",
+        "El municipio necesita definir quien encabeza el gobierno local. " +
+        "¿Que cargo puede ocupar una mujer como maxima autoridad del Ayuntamiento?",
       opciones: [
         "Presidenta Municipal",
         "Solo secretaria del alcalde",
@@ -35,10 +35,10 @@
         "¡Correcto! Las mujeres pueden ser Presidentas Municipales y dirigir el Ayuntamiento con plenos derechos.",
     },
     {
-      titulo: "Mision 2: Paridad de género",
+      titulo: "Mision 2: Paridad de genero",
       problema:
-        "Se integrará el nuevo Cabildo. Según el principio constitucional de " +
-        "paridad de género, ¿cómo deben conformarse las candidaturas?",
+        "Se integrara el nuevo Cabildo. Segun el principio constitucional de " +
+        "paridad de genero, ¿como deben conformarse las candidaturas?",
       opciones: [
         "Solo con hombres experimentados",
         "50% mujeres y 50% hombres",
@@ -46,15 +46,15 @@
       ],
       correcta: 1,
       retro:
-        "¡Muy bien! La paridad de género exige igual número de mujeres y hombres en las candidaturas y órganos de gobierno.",
+        "¡Muy bien! La paridad de genero exige igual numero de mujeres y hombres en las candidaturas y organos de gobierno.",
     },
     {
       titulo: "Mision 3: Las Regidoras",
       problema:
-        "Una regidora propone mejorar el alumbrado público. " +
-        "¿Cuál es la función principal de una regidora en el Cabildo?",
+        "Una regidora propone mejorar el alumbrado publico. " +
+        "¿Cual es la funcion principal de una regidora en el Cabildo?",
       opciones: [
-        "Organizar únicamente eventos sociales",
+        "Organizar unicamente eventos sociales",
         "Obedecer todas las decisiones sin opinar",
         "Vigilar, proponer y votar acuerdos para el municipio",
       ],
@@ -63,32 +63,32 @@
         "¡Exacto! Las regidoras analizan, proponen y votan los acuerdos que benefician a la comunidad.",
     },
     {
-      titulo: "Mision 4: La Síndica Municipal",
+      titulo: "Mision 4: La Sindica Municipal",
       problema:
-        "El Ayuntamiento enfrenta un asunto legal sobre un terreno público. " +
-        "¿Qué papel juega la Síndica Municipal?",
+        "El Ayuntamiento enfrenta un asunto legal sobre un terreno publico. " +
+        "¿Que papel juega la Sindica Municipal?",
       opciones: [
         "Representar legalmente al municipio y cuidar su patrimonio",
         "Cobrar los impuestos casa por casa",
-        "Dirigir la policía municipal",
+        "Dirigir la policia municipal",
       ],
       correcta: 0,
       retro:
-        "¡Correcto! La Síndica es la representante legal del Ayuntamiento y protege el patrimonio municipal.",
+        "¡Correcto! La Sindica es la representante legal del Ayuntamiento y protege el patrimonio municipal.",
     },
     {
-      titulo: "Mision 5: Participación ciudadana",
+      titulo: "Mision 5: Participacion ciudadana",
       problema:
         "Una joven quiere participar en las decisiones de su comunidad. " +
-        "¿Cuál es el mejor camino para lograrlo?",
+        "¿Cual es el mejor camino para lograrlo?",
       opciones: [
         "Esperar a que otros decidan por ella",
-        "Participar en consultas, comités y postularse a cargos públicos",
-        "No involucrarse, la política no es para mujeres",
+        "Participar en consultas, comites y postularse a cargos publicos",
+        "No involucrarse, la politica no es para mujeres",
       ],
       correcta: 1,
       retro:
-        "¡Así es! La participación activa de las mujeres fortalece la democracia y la administración municipal.",
+        "¡Asi es! La participacion activa de las mujeres fortalece la democracia y la administracion municipal.",
     },
   ];
 
@@ -128,7 +128,7 @@
   };
 
   /* ==============================================================
-     4. NARRACIÓN POR VOZ (Web Speech API)
+     4. NARRACIoN POR VOZ (Web Speech API)
      No requiere archivos de audio: usa la voz del sistema.
      ============================================================== */
   function narrar(texto) {
@@ -143,9 +143,13 @@
 
   const TEXTO_INTRO =
     "Bienvenida y bienvenido al Ayuntamiento virtual. " +
-    "En esta experiencia conocerás el papel de las mujeres en la administración pública municipal. " +
-    "Recorre la plaza, acércate a las cinco estaciones moradas y responde cada misión. " +
-    "Cada respuesta correcta vale veinte puntos. ¡Mucho éxito!";
+    "En esta experiencia conoceras el papel de las mujeres en la administracion publica municipal. " +
+    "Recorre la plaza, acercate a las cinco estaciones moradas y responde cada mision. " +
+    "Cada respuesta correcta vale veinte puntos. " +
+    "En computadora, camina con las teclas W A S D y elige las respuestas con doble clic. " +
+    "En celular, toca dos veces la opcion que quieras elegir. " +
+    "Con visor de realidad virtual, coloca el circulo amarillo sobre la respuesta y manten la mirada fija durante tres segundos. " +
+    "Marlene Pineda García te desea ¡Mucho exito!, al final obtendras un diploma personalizado. ";
 
   /* ==============================================================
      5. EFECTOS DE SONIDO (Web Audio API)
@@ -174,8 +178,8 @@
   const sonidoError = () => { tono(220, 0.25, "sawtooth", 0); tono(180, 0.3, "sawtooth", 0.2); };
 
   /* ==============================================================
-     6. CONSTRUCCIÓN DE LAS ESTACIONES 3D
-     Cada estación <a-entity class="estacion"> del HTML se llena
+     6. CONSTRUCCIoN DE LAS ESTACIONES 3D
+     Cada estacion <a-entity class="estacion"> del HTML se llena
      aquí con: pedestal, marcador flotante y panel de pregunta.
      ============================================================== */
   function crearEstaciones() {
@@ -183,17 +187,18 @@
       const idx = parseInt(estacion.dataset.mision, 10);
       const mision = MISIONES[idx];
 
-      /* ---- Pedestal físico ---- */
-      const pedestal = document.createElement("a-cylinder");
-      pedestal.setAttribute("position", "0 0.5 0");
-      pedestal.setAttribute("radius", "0.5");
-      pedestal.setAttribute("height", "1");
-      pedestal.setAttribute("color", "#7a1f9e");
-      estacion.appendChild(pedestal);
+      /* ---- Círculo en el piso ---- */
+      const circulo = document.createElement("a-ring");
+      circulo.setAttribute("rotation", "-90 0 0");
+      circulo.setAttribute("position", "0 0.02 0");
+      circulo.setAttribute("radius-inner", "0.55");
+      circulo.setAttribute("radius-outer", "0.7");
+      circulo.setAttribute("color", "#7a1f9e");
+      estacion.appendChild(circulo);
 
-      /* ---- Marcador flotante con número de misión ---- */
+      /* ---- Marcador flotante con numero de mision ---- */
       const marcador = document.createElement("a-octahedron");
-      marcador.setAttribute("position", "0 1.6 0");
+      marcador.setAttribute("position", "0 7 0");
       marcador.setAttribute("radius", "0.35");
       marcador.setAttribute("color", "#ffcc00");
       marcador.setAttribute(
@@ -205,7 +210,7 @@
 
       const numero = document.createElement("a-text");
       numero.setAttribute("value", "Mision " + (idx + 1));
-      numero.setAttribute("position", "0 2.3 0");
+      numero.setAttribute("position", "0 7.7 0");
       numero.setAttribute("align", "center");
       numero.setAttribute("width", "6");
       numero.setAttribute("color", "#1c3f66");
@@ -213,33 +218,33 @@
 
       /* ---- Panel de la pregunta (oculto hasta acercarse) ---- */
       const panel = document.createElement("a-entity");
-      panel.setAttribute("position", "0 2.2 -0.2");
+      panel.setAttribute("position", "0 3 -0.2");
       panel.setAttribute("visible", "false");
       panel.classList.add("panel");
 
       // Fondo del panel
       const fondo = document.createElement("a-plane");
-      fondo.setAttribute("width", "4");
-      fondo.setAttribute("height", "3.4");
+      fondo.setAttribute("width", "10");
+      fondo.setAttribute("height", "6.5");
       fondo.setAttribute("color", "#0d1526");
       fondo.setAttribute("opacity", "0.92");
       panel.appendChild(fondo);
 
-      // Título de la misión
+      // Título de la mision
       const titulo = document.createElement("a-text");
       titulo.setAttribute("value", mision.titulo);
-      titulo.setAttribute("position", "0 1.45 0.01");
+      titulo.setAttribute("position", "0 2.65 0.01");
       titulo.setAttribute("align", "center");
-      titulo.setAttribute("width", "5.4");
+      titulo.setAttribute("width", "9");
       titulo.setAttribute("color", "#ffcc00");
       panel.appendChild(titulo);
 
       // Texto del problema
       const problema = document.createElement("a-text");
       problema.setAttribute("value", mision.problema);
-      problema.setAttribute("position", "0 0.85 0.01");
+      problema.setAttribute("position", "0 1.45 0.01");
       problema.setAttribute("align", "center");
-      problema.setAttribute("width", "4.6");
+      problema.setAttribute("width", "9");
       problema.setAttribute("wrap-count", "48");
       problema.setAttribute("color", "#ffffff");
       panel.appendChild(problema);
@@ -248,7 +253,7 @@
       mision.opciones.forEach((textoOpcion, i) => {
         const opcion = document.createElement("a-entity");
         opcion.setAttribute("mixin", "mixin-opcion");
-        opcion.setAttribute("position", "0 " + (0.1 - i * 0.68) + " 0.02");
+        opcion.setAttribute("position", "0 " + (0.2 - i * 1.1) + " 0.02");
         opcion.setAttribute("text", "value", String.fromCharCode(65 + i) + ") " + textoOpcion);
         opcion.classList.add("clicable");
         opcion.dataset.mision = idx;
@@ -262,7 +267,10 @@
           if (!estado.respondida[idx]) this.setAttribute("material", "color", "#1c3f66");
         });
 
-        // Selección de respuesta (clic o cursor "fuse" de Cardboard)
+        // Seleccion de respuesta (doble clic o cursor "fuse" de Cardboard)
+        opcion.addEventListener("dblclick", function () {
+          responder(idx, i, this, panel);
+        });
         opcion.addEventListener("click", function () {
           responder(idx, i, this, panel);
         });
@@ -270,13 +278,13 @@
         panel.appendChild(opcion);
       });
 
-      // Texto de retroalimentación (se muestra tras responder)
+      // Texto de retroalimentacion (se muestra tras responder)
       const retro = document.createElement("a-text");
       retro.setAttribute("value", "");
-      retro.setAttribute("position", "0 -2.05 0.01");
+      retro.setAttribute("position", "0 -3.2 0.01");
       retro.setAttribute("align", "center");
-      retro.setAttribute("width", "4.4");
-      retro.setAttribute("wrap-count", "50");
+      retro.setAttribute("width", "9");
+      retro.setAttribute("wrap-count", "55");
       retro.setAttribute("color", "#7ee8a5");
       retro.classList.add("retro");
       panel.appendChild(retro);
@@ -287,7 +295,7 @@
 
   /* ==============================================================
      7. MOSTRAR PANELES POR PROXIMIDAD
-     Comprueba cada 300 ms la distancia jugador-estación:
+     Comprueba cada 300 ms la distancia jugador-estacion:
      el panel solo aparece si el jugador está cerca (< 6 m).
      ============================================================== */
   function vigilarProximidad() {
@@ -308,7 +316,7 @@
   }
 
   /* ==============================================================
-     8. LÓGICA DE RESPUESTA
+     8. LoGICA DE RESPUESTA
      ============================================================== */
   function responder(idxMision, idxOpcion, elemOpcion, panel) {
     if (!estado.iniciado) return;
@@ -341,7 +349,7 @@
       sonidoError();
       narrar("Incorrecto. La respuesta correcta era: " + correctaTexto);
 
-      // Resaltar en verde la opción correcta
+      // Resaltar en verde la opcion correcta
       panel.querySelectorAll(".clicable").forEach(function (op) {
         if (parseInt(op.dataset.opcion, 10) === mision.correcta) {
           op.setAttribute("material", "color", "#28c76f");
@@ -349,12 +357,12 @@
       });
     }
 
-    // Desactivar todas las opciones de esta misión
+    // Desactivar todas las opciones de esta mision
     panel.querySelectorAll(".clicable").forEach(function (op) {
       op.classList.remove("clicable");
     });
 
-    // Apagar el marcador flotante (misión completada)
+    // Apagar el marcador flotante (mision completada)
     const marcador = elemOpcion.closest(".estacion").querySelector(".marcador");
     if (marcador) marcador.setAttribute("color", "#888888");
 
@@ -377,10 +385,15 @@
     ui.barra.style.width = progreso * 100 + "%";
     ui.barraEtiqueta.textContent = "Mision " + estado.completadas + " / " + TOTAL_MISIONES;
 
-    // HUD 3D (dentro del visor VR): barra escalada desde la izquierda
+    // HUD 3D (dentro del visor VR): barra crece de izquierda a derecha
     const barraVR = document.querySelector("#hud-vr-barra");
     const textoVR = document.querySelector("#hud-vr-texto");
-    if (barraVR) barraVR.setAttribute("scale", progreso + " 1 1");
+    if (barraVR) {
+      const ancho = 1.3 * progreso;
+      const posX = -0.65 + ancho / 2;
+      barraVR.setAttribute("width", ancho || 0.01);
+      barraVR.setAttribute("position", posX + " 0 0.01");
+    }
     if (textoVR) {
       textoVR.setAttribute(
         "value",
@@ -399,13 +412,13 @@
 
     ui.diplomaNombre.textContent = estado.nombre;
     ui.diplomaPuntaje.textContent =
-      "Puntuación final: " + estado.puntos + " / " + TOTAL_MISIONES * PUNTOS_POR_MISION;
+      "Puntuacion final: " + estado.puntos + " / " + TOTAL_MISIONES * PUNTOS_POR_MISION;
 
-    // Mensaje según desempeño
+    // Mensaje segun desempeño
     let mensaje;
-    if (estado.puntos === 100) mensaje = "¡Excelente! Dominas el tema a la perfección. 🏆";
+    if (estado.puntos === 100) mensaje = "¡Excelente! Dominas el tema a la perfeccion. 🏆";
     else if (estado.puntos >= 60) mensaje = "¡Muy buen trabajo! Sigue aprendiendo. 🌟";
-    else mensaje = "¡Buen intento! Vuelve a jugar para mejorar tu puntuación. 💪";
+    else mensaje = "¡Buen intento! Vuelve a jugar para mejorar tu puntuacion. 💪";
     ui.diplomaMensaje.textContent = mensaje;
 
     // Fecha del diploma
@@ -434,7 +447,7 @@
     ui.hud.classList.remove("oculto");
 
     actualizarHUD();
-    narrar(TEXTO_INTRO); // introducción narrada
+    narrar(TEXTO_INTRO); // introduccion narrada
   }
 
   function reiniciar() {
@@ -452,7 +465,7 @@
     ui.btnReiniciar.addEventListener("click", reiniciar);
   }
 
-  // Esperar a que la escena A-Frame esté lista antes de construir
+  // Esperar a que la escena A-Frame este lista antes de construir
   const escena = document.querySelector("#escena");
   if (escena.hasLoaded) {
     iniciarJuego();

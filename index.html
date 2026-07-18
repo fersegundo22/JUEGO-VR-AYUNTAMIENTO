@@ -4,15 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Mujeres en la Administración Pública Municipal | Experiencia VR</title>
+
+  <!-- ============================================================
+       A-FRAME: framework oficial de realidad virtual para la web
+       Compatible con Google Cardboard / VR Box (botón VR incluido)
+       ============================================================ -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+  <!-- Hoja de estilos de la interfaz 2D (HUD, intro, diploma) -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- ====================== INTRODUCCIÓN ====================== -->
+  <!-- ================================================================
+       PANTALLA DE INTRODUCCIÓN (overlay 2D sobre la escena VR)
+       ================================================================ -->
   <div id="pantalla-intro" class="overlay">
     <div class="tarjeta">
-      <h1>Mujeres en la Administración Pública Municipal</h1>
+      <h1>🏛️ Mujeres en la Administración Pública Municipal</h1>
       <p class="subtitulo">Una experiencia educativa en Realidad Virtual</p>
       <p>
         Recorre el Ayuntamiento, conoce el papel de las mujeres en el
@@ -20,9 +29,10 @@
         Cada respuesta correcta vale <strong>20 puntos</strong>.
       </p>
       <ul class="instrucciones">
-        <li> <strong>PC:</strong> camina con <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> y mira con el mouse.</li>
-        <li> <strong>Celular / Shinecon:</strong> mira con el giroscopio y selecciona fijando la vista.</li>
-        <li> Pulsa el ícono de lentes para entrar en modo VR.</li>
+        <li>🖥️ <strong>PC:</strong> camina con <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>, mira con el mouse y haz <strong>doble clic</strong> para elegir respuesta.</li>
+        <li>📱 <strong>Celular:</strong> mira con el giroscopio y toca <strong>doble tap</strong> en la opción.</li>
+        <li>🥽 <strong>Con visor VR (Cardboard/Shinecon):</strong> coloca el círculo amarillo sobre la respuesta y <strong>mantén la mirada fija 3 segundos</strong>. El círculo se irá encogiendo hasta seleccionar.</li>
+        <li>🥽 Pulsa el ícono de lentes (abajo a la derecha) para entrar en modo VR.</li>
       </ul>
       <label for="nombre-jugador">Escribe tu nombre (aparecerá en tu diploma):</label>
       <input id="nombre-jugador" type="text" maxlength="40" placeholder="Tu nombre" />
@@ -30,11 +40,24 @@
     </div>
   </div>
 
-  <!-- ====================== PANTALLA FINAL ====================== -->
+  <!-- ================================================================
+       HUD 2D: puntuación y barra de progreso (visible fuera de VR)
+       ================================================================ -->
+  <div id="hud" class="oculto">
+    <div id="hud-puntos">⭐ Puntos: <span id="puntos-texto">0</span></div>
+    <div id="barra-contenedor" title="Progreso de misiones">
+      <div id="barra-progreso"></div>
+      <span id="barra-etiqueta">Misión 0 / 5</span>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       PANTALLA FINAL: puntuación + diploma
+       ================================================================ -->
   <div id="pantalla-final" class="overlay oculto">
     <div class="tarjeta diploma">
       <div class="diploma-borde">
-        <h1>DIPLOMA</h1>
+        <h1>🎓 DIPLOMA</h1>
         <p class="diploma-otorga">Se otorga el presente reconocimiento a</p>
         <h2 id="diploma-nombre">Participante</h2>
         <p class="diploma-motivo">
@@ -50,7 +73,7 @@
   </div>
 
   <!-- ================================================================
-       ESCENA A-FRAME
+       ESCENA A-FRAME (mundo 3D)
        ================================================================ -->
   <a-scene id="escena"
            background="color: #87CEEB"
@@ -58,50 +81,127 @@
            renderer="antialias: true"
            loading-screen="dollyColor: #1c2b4a; backgroundColor: #0d1526">
 
+    <!-- ---------- ASSETS (mixins reutilizables) ---------- -->
+    <a-assets>
+      <!-- Mixin: estilo base de los botones de respuesta -->
+      <a-mixin id="mixin-opcion"
+               geometry="primitive: plane; width: 8; height: 0.7"
+               material="color: #1c3f66; opacity: 0.95"
+               text="align: center; width: 9; color: #ffffff; wrapCount: 55"></a-mixin>
+      <!-- Mixin: tronco y copa de árbol -->
+      <a-mixin id="mixin-tronco" geometry="primitive: cylinder; radius: 0.18; height: 1.6" material="color: #6b4226"></a-mixin>
+      <a-mixin id="mixin-copa" geometry="primitive: cone; radiusBottom: 1.1; radiusTop: 0; height: 2.2" material="color: #2e7d32"></a-mixin>
+    </a-assets>
+
     <!-- ---------- ILUMINACIÓN ---------- -->
     <a-entity light="type: ambient; color: #ffffff; intensity: 0.6"></a-entity>
     <a-entity light="type: directional; color: #fff6e0; intensity: 0.9" position="-10 20 10"></a-entity>
 
-    <!-- ---------- SUELO Y PLAZA ---------- -->
+    <!-- ---------- NUBES ---------- -->
+    <a-entity position="-10 18 -20">
+      <a-sphere position="0 0 0" radius="2.5" color="#ffffff" opacity="0.85"></a-sphere>
+      <a-sphere position="3 1 0" radius="2" color="#ffffff" opacity="0.8"></a-sphere>
+      <a-sphere position="-3 0.5 0" radius="1.8" color="#ffffff" opacity="0.8"></a-sphere>
+    </a-entity>
+    <a-entity position="12 20 -30">
+      <a-sphere position="0 0 0" radius="3" color="#ffffff" opacity="0.8"></a-sphere>
+      <a-sphere position="3.5 1 1" radius="2.2" color="#ffffff" opacity="0.75"></a-sphere>
+      <a-sphere position="-3 0.8 -1" radius="2" color="#ffffff" opacity="0.75"></a-sphere>
+    </a-entity>
+    <a-entity position="-15 22 -15">
+      <a-sphere position="0 0 0" radius="2" color="#ffffff" opacity="0.8"></a-sphere>
+      <a-sphere position="2.5 0.5 0" radius="1.6" color="#ffffff" opacity="0.75"></a-sphere>
+    </a-entity>
+    <a-entity position="15 19 -10">
+      <a-sphere position="0 0 0" radius="2.2" color="#ffffff" opacity="0.82"></a-sphere>
+      <a-sphere position="-2.5 0.6 0" radius="1.8" color="#ffffff" opacity="0.78"></a-sphere>
+      <a-sphere position="2 0.4 0.5" radius="1.5" color="#ffffff" opacity="0.75"></a-sphere>
+    </a-entity>
+
+    <!-- ---------- FAROLES ---------- -->
+    <!-- Faroles lado izquierdo del camino -->
+    <a-entity position="-3 0 4">
+      <a-cylinder position="0 1.6 0" radius="0.08" height="3.2" color="#3a3a3a"></a-cylinder>
+      <a-sphere position="0 3.4 0" radius="0.3" color="#ffdd88" opacity="0.9"></a-sphere>
+      <a-entity light="type: point; color: #ffeebb; intensity: 1.5; distance: 8" position="0 3.4 0"></a-entity>
+    </a-entity>
+    <a-entity position="3 0 4">
+      <a-cylinder position="0 1.6 0" radius="0.08" height="3.2" color="#3a3a3a"></a-cylinder>
+      <a-sphere position="0 3.4 0" radius="0.3" color="#ffdd88" opacity="0.9"></a-sphere>
+      <a-entity light="type: point; color: #ffeebb; intensity: 1.5; distance: 8" position="0 3.4 0"></a-entity>
+    </a-entity>
+    <!-- Faroles en la plaza -->
+    <a-entity position="-6 0 8">
+      <a-cylinder position="0 1.6 0" radius="0.08" height="3.2" color="#3a3a3a"></a-cylinder>
+      <a-sphere position="0 3.4 0" radius="0.3" color="#ffdd88" opacity="0.9"></a-sphere>
+      <a-entity light="type: point; color: #ffeebb; intensity: 1.2; distance: 7" position="0 3.4 0"></a-entity>
+    </a-entity>
+    <a-entity position="6 0 8">
+      <a-cylinder position="0 1.6 0" radius="0.08" height="3.2" color="#3a3a3a"></a-cylinder>
+      <a-sphere position="0 3.4 0" radius="0.3" color="#ffdd88" opacity="0.9"></a-sphere>
+      <a-entity light="type: point; color: #ffeebb; intensity: 1.2; distance: 7" position="0 3.4 0"></a-entity>
+    </a-entity>
+    <!-- Faroles junto al Ayuntamiento -->
+    <a-entity position="-12 0 -10">
+      <a-cylinder position="0 1.6 0" radius="0.08" height="3.2" color="#3a3a3a"></a-cylinder>
+      <a-sphere position="0 3.4 0" radius="0.3" color="#ffdd88" opacity="0.9"></a-sphere>
+      <a-entity light="type: point; color: #ffeebb; intensity: 1; distance: 6" position="0 3.4 0"></a-entity>
+    </a-entity>
+    <a-entity position="12 0 -10">
+      <a-cylinder position="0 1.6 0" radius="0.08" height="3.2" color="#3a3a3a"></a-cylinder>
+      <a-sphere position="0 3.4 0" radius="0.3" color="#ffdd88" opacity="0.9"></a-sphere>
+      <a-entity light="type: point; color: #ffeebb; intensity: 1; distance: 6" position="0 3.4 0"></a-entity>
+    </a-entity>
     <a-plane rotation="-90 0 0" width="200" height="200" color="#79b465"></a-plane>
     <a-circle rotation="-90 0 0" position="0 0.01 4" radius="14" color="#c9c2b4"></a-circle>
+    <!-- Camino de acceso al Ayuntamiento -->
     <a-plane rotation="-90 0 0" position="0 0.02 5" width="4" height="20" color="#a89f8d"></a-plane>
 
-    <!-- ===================== AYUNTAMIENTO ====================== -->
+    <!-- ================================================================
+         AYUNTAMIENTO 3D (construido con primitivas de A-Frame)
+         ================================================================ -->
     <a-entity id="ayuntamiento" position="0 0 -12">
+      <!-- Cuerpo principal del edificio -->
       <a-box position="0 3 0" width="22" height="6" depth="8" color="#e8d8b0"></a-box>
+      <!-- Segundo nivel central -->
       <a-box position="0 7 0" width="10" height="2.4" depth="7" color="#dfcda0"></a-box>
+      <!-- Techo central -->
       <a-box position="0 8.5 0" width="10.8" height="0.6" depth="7.6" color="#8d5a3a"></a-box>
+      <!-- Techos laterales -->
       <a-box position="-8 6.3 0" width="6.5" height="0.6" depth="8.4" color="#8d5a3a"></a-box>
       <a-box position="8 6.3 0" width="6.5" height="0.6" depth="8.4" color="#8d5a3a"></a-box>
 
+      <!-- Columnas de la fachada -->
       <a-cylinder position="-4 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
       <a-cylinder position="-2 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
       <a-cylinder position="2 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
       <a-cylinder position="4 3 4.2" radius="0.35" height="6" color="#f5ecd7"></a-cylinder>
 
+      <!-- Puerta principal -->
       <a-box position="0 1.5 4.05" width="2.4" height="3" depth="0.2" color="#5b3a21"></a-box>
 
-      <a-box position="-8 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
-      <a-box position="-6 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
-      <a-box position="6 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
-      <a-box position="8 4 4.05" width="2" height="2.2" depth="0.1" color="#9fc6e8"></a-box>
-      <a-box position="-3 7 3.55" width="1.6" height="1.5" depth="0.1" color="#9fc6e8"></a-box>
-      <a-box position="3 7 3.55" width="1.6" height="1.5" depth="0.1" color="#9fc6e8"></a-box>
+      <!-- Ventanas de la fachada -->
+      <a-box position="-7 3.5 4.05" width="1.4" height="1.8" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="-9.3 3.5 4.05" width="1.4" height="1.8" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="7 3.5 4.05" width="1.4" height="1.8" depth="0.1" color="#9fc6e8"></a-box>
+      <a-box position="9.3 3.5 4.05" width="1.4" height="1.8" depth="0.1" color="#9fc6e8"></a-box>
 
+      <!-- Reloj del Ayuntamiento -->
       <a-circle position="0 7.2 3.55" radius="0.8" color="#fdf6e3"></a-circle>
       <a-ring position="0 7.2 3.56" radius-inner="0.75" radius-outer="0.85" color="#5b3a21"></a-ring>
       <a-box position="0 7.35 3.57" width="0.06" height="0.5" depth="0.02" color="#333"></a-box>
-      <a-box position="0.15 7.2 3.57" width="0.35" height="0.06" depth="0.02" color="#333"></a-box>
+      <a-box position="0.15 7.2 3.57" width="0.35" height="0.06" depth="0.02" color="#333" rotation="0 0 0"></a-box>
 
-      <a-text value="H. AYUNTAMIENTO" position="0 8.5 4" align="center" color="#5b3a21" width="14"></a-text>
+      <!-- Letrero del edificio -->
+      <a-text value="H. AYUNTAMIENTO" position="0 8.5 4" align="center" color="#ffffff" width="14" font-weight="bold"></a-text>
 
+      <!-- Asta bandera -->
       <a-cylinder position="-13 4 6" radius="0.08" height="8" color="#cccccc"></a-cylinder>
       <a-plane position="-12.1 7.2 6" width="1.8" height="1.1" color="#7a1f9e" side="double"
                animation="property: rotation; to: 0 15 0; dir: alternate; loop: true; dur: 2000"></a-plane>
     </a-entity>
 
-    <!-- ---------- FUENTE ---------- -->
+    <!-- ---------- FUENTE DE LA PLAZA ---------- -->
     <a-entity position="0 0 6">
       <a-cylinder position="0 0.3 0" radius="2" height="0.6" color="#9aa7b5"></a-cylinder>
       <a-cylinder position="0 0.65 0" radius="1.7" height="0.15" color="#3e7cb1" opacity="0.85"></a-cylinder>
@@ -110,92 +210,52 @@
                 animation="property: position; to: 0 1.95 0; dir: alternate; loop: true; dur: 1200"></a-sphere>
     </a-entity>
 
-    <!-- ---------- ÁRBOLES ---------- -->
-    <a-entity position="-16 0 2"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
-    <a-entity position="16 0 2"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
-    <a-entity position="-18 0 12"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
-    <a-entity position="18 0 12"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
-    <a-entity position="-10 0 18"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
-    <a-entity position="10 0 18"><a-cylinder position="0 0.8 0" radius="0.18" height="1.6" color="#6b4226"></a-cylinder><a-cone position="0 2.6 0" radius-bottom="1.1" radius-top="0" height="2.2" color="#2e7d32"></a-cone></a-entity>
+    <!-- ---------- ÁRBOLES DECORATIVOS ---------- -->
+    <a-entity position="-16 0 2"><a-entity mixin="mixin-tronco" position="0 0.8 0"></a-entity><a-entity mixin="mixin-copa" position="0 2.6 0"></a-entity></a-entity>
+    <a-entity position="16 0 2"><a-entity mixin="mixin-tronco" position="0 0.8 0"></a-entity><a-entity mixin="mixin-copa" position="0 2.6 0"></a-entity></a-entity>
+    <a-entity position="-18 0 12"><a-entity mixin="mixin-tronco" position="0 0.8 0"></a-entity><a-entity mixin="mixin-copa" position="0 2.6 0"></a-entity></a-entity>
+    <a-entity position="18 0 12"><a-entity mixin="mixin-tronco" position="0 0.8 0"></a-entity><a-entity mixin="mixin-copa" position="0 2.6 0"></a-entity></a-entity>
+    <a-entity position="-10 0 18"><a-entity mixin="mixin-tronco" position="0 0.8 0"></a-entity><a-entity mixin="mixin-copa" position="0 2.6 0"></a-entity></a-entity>
+    <a-entity position="10 0 18"><a-entity mixin="mixin-tronco" position="0 0.8 0"></a-entity><a-entity mixin="mixin-copa" position="0 2.6 0"></a-entity></a-entity>
 
-    <!-- ===================== ESTACIONES (posiciones fijas en el mundo) ===================== -->
+    <!-- ================================================================
+         ESTACIONES DE MISIÓN (los paneles se llenan desde js/game.js)
+         Cada estación tiene: pedestal, marcador flotante y panel de quiz.
+         ================================================================ -->
     <a-entity id="estaciones">
-      <a-entity class="estacion" data-mision="0" position="-8 0 0"   rotation="0 35 0"></a-entity>
-      <a-entity class="estacion" data-mision="1" position="8 0 0"    rotation="0 -35 0"></a-entity>
+      <a-entity class="estacion" data-mision="0" position="-8 0 0" rotation="0 35 0"></a-entity>
+      <a-entity class="estacion" data-mision="1" position="8 0 0" rotation="0 -35 0"></a-entity>
       <a-entity class="estacion" data-mision="2" position="-11 0 10" rotation="0 55 0"></a-entity>
-      <a-entity class="estacion" data-mision="3" position="11 0 10"  rotation="0 -55 0"></a-entity>
-      <a-entity class="estacion" data-mision="4" position="0 0 16"   rotation="0 180 0"></a-entity>
+      <a-entity class="estacion" data-mision="3" position="11 0 10" rotation="0 -55 0"></a-entity>
+      <a-entity class="estacion" data-mision="4" position="0 0 16" rotation="0 180 0"></a-entity>
     </a-entity>
 
-    <!-- ==================================================================
-         JUGADOR (rig): WASD + mouse / giroscopio
-         Panel VR centrado frente a la cámara a z=-4
-         ================================================================== -->
-    <a-entity id="rig" position="0 0 22" wasd-controls="acceleration: 40">
-      <a-entity id="camara" camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+    <!-- ================================================================
+         JUGADOR (rig): WASD + mouse / giroscopio + cursor de mirada
+         ================================================================ -->
+    <a-entity id="rig" position="0 0 22" wasd-controls="acceleration: 60" look-controls="pointerLockEnabled: false">
+      <a-entity id="camara" camera position="0 1.6 0">
 
-        <!-- Cursor de selección (anillo pequeño, no tapa el texto) -->
-        <a-ring id="cursor"
-                position="0 0 -0.8"
-                radius-inner="0.012" radius-outer="0.02"
-                color="#ffcc00"
-                opacity="0.85"
-                raycaster="objects: .clicable; far: 6"
-                fuse="true" fuse-timeout="1300"
-                animation__fusing="property: scale; startEvents: fusing; from: 1 1 1; to: 0.35 0.35 0.35; dur: 1300"
-                animation__reset="property: scale; startEvents: mouseleave; to: 1 1 1; dur: 150">
-        </a-ring>
+        <!-- Cursor de mirada (fuse) para Google Cardboard / VR Box -->
+        <a-cursor fuse="true" fuse-timeout="3000"
+                  scale="1.8 1.8 1.8"
+                  raycaster="objects: .clicable"
+                  material="color: #ffcc00; shader: flat"
+                  animation__fusing="property: scale; startEvents: fusing; from: 1.8 1.8 1.8; to: 0.6 0.6 0.6; dur: 3000"
+                  animation__reset="property: scale; startEvents: mouseleave; to: 1.8 1.8 1.8; dur: 150"></a-cursor>
 
-        <!-- =============================================================
-             PANEL VR ÚNICO (centrado frente al usuario a 4 metros)
-             Layout vertical: título -> pregunta -> opciones A/B/C -> retro
-             ============================================================= -->
-        <a-entity id="panel-vr" position="0 -0.3 -4" visible="false">
-
-          <!-- Fondo oscuro semitransparente -->
-          <a-plane width="3.6" height="3.4" color="#0d1526" opacity="0.94"></a-plane>
-
-          <!-- Título -->
-          <a-text id="pv-titulo" value="" position="0 1.4 0.01" align="center" width="4.6" color="#ffcc00"></a-text>
-
-          <!-- Pregunta -->
-          <a-text id="pv-problema" value="" position="0 0.45 0.01" align="center" width="4.8" wrap-count="52" color="#ffffff"></a-text>
-
-          <!-- Opción A -->
-          <a-entity id="pv-opcion-a" class="clicable" data-opcion="0" position="0 -0.35 0.02">
-            <a-plane width="3.2" height="0.48" color="#1c3f66" opacity="0.95"></a-plane>
-            <a-text id="pv-texto-a" value="A)" position="0 -0.02 0.01" align="center" width="4.2" color="#ffffff"></a-text>
-          </a-entity>
-
-          <!-- Opción B -->
-          <a-entity id="pv-opcion-b" class="clicable" data-opcion="1" position="0 -0.95 0.02">
-            <a-plane width="3.2" height="0.48" color="#1c3f66" opacity="0.95"></a-plane>
-            <a-text id="pv-texto-b" value="B)" position="0 -0.02 0.01" align="center" width="4.2" color="#ffffff"></a-text>
-          </a-entity>
-
-          <!-- Opción C -->
-          <a-entity id="pv-opcion-c" class="clicable" data-opcion="2" position="0 -1.55 0.02">
-            <a-plane width="3.2" height="0.48" color="#1c3f66" opacity="0.95"></a-plane>
-            <a-text id="pv-texto-c" value="C)" position="0 -0.02 0.01" align="center" width="4.2" color="#ffffff"></a-text>
-          </a-entity>
-
-          <!-- Retroalimentación -->
-          <a-text id="pv-retro" value="" position="0 -2.15 0.01" align="center" width="4.6" wrap-count="50" color="#7ee8a5"></a-text>
-        </a-entity>
-
-        <!-- ===================== HUD VR (puntos + barra) ===================== -->
-        <a-entity id="hud-vr" position="0 -1.55 -2">
-          <a-plane width="1.4" height="0.1" color="#222" opacity="0.75"></a-plane>
-          <a-plane id="hud-vr-barra" position="-0.7 0 0.01" width="1.4" height="0.08" color="#28c76f" scale="0 1 1"></a-plane>
-          <a-text id="hud-vr-texto" value="Puntos: 0  |  0/5 misiones"
+        <!-- HUD 3D anclado a la cámara (visible dentro del visor VR) -->
+        <a-entity id="hud-vr" position="0 -0.85 -1.6">
+          <a-plane width="1.3" height="0.1" color="#222" opacity="0.75"></a-plane>
+          <a-plane id="hud-vr-barra" position="-0.65 0 0.01" width="0.01" height="0.08"
+                   color="#28c76f"></a-plane>
+          <a-text id="hud-vr-texto" value="Puntos: 0  |  Mision 0/5"
                   position="0 0.14 0" align="center" width="2.2" color="#ffffff"></a-text>
-        </a-entity>
-
-      </a-entity>
     </a-entity>
 
   </a-scene>
 
+  <!-- Lógica del juego -->
   <script src="js/game.js"></script>
 </body>
 </html>
